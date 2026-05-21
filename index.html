@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Parallax Fix</title>
+
+<style>
+body {
+  margin: 0;
+  overflow: hidden;
+  background: black;
+}
+
+.scene {
+  position: absolute;
+  width: 115vw;
+  height: 115vh;
+  left: -7.5vw;
+  top: -7.5vh;
+}
+
+.layer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.blink {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: opacity;
+}
+</style>
+</head>
+
+<body>
+
+<div class="scene">
+
+  <!-- BACKGROUND -->
+  <img src="back1.png" class="layer" data-speed="0.005">
+  <img src="back2.png" class="layer" data-speed="0.006">
+  <img src="back3.png" class="layer" data-speed="0.007">
+  <img src="back4.png" class="layer" data-speed="0.008">
+  <img src="back5.png" class="layer" data-speed="0.009">
+  <img src="back6.png" class="layer" data-speed="0.01">
+  <img src="back7.png" class="layer" data-speed="0.011">
+  <img src="back8.png" class="layer" data-speed="0.012">
+  <img src="back9.png" class="layer" data-speed="0.013">
+  <img src="back10.png" class="layer" data-speed="0.014">
+  <img src="back11.png" class="layer" data-speed="0.015">
+  <img src="back12.png" class="layer" data-speed="0.016">
+  <img src="back13.png" class="layer" data-speed="0.017">
+  <img src="back14.png" class="layer" data-speed="0.018">
+
+
+  <img src="back15blink1.png" class="layer blink" data-speed="0.018" id="blink1">
+  <img src="back15blink2.png" class="layer blink" data-speed="0.018" id="blink2" style="opacity:0">
+
+
+  <img src="back16.png" class="layer" data-speed="0.02">
+  <img src="back17.png" class="layer" data-speed="0.025">
+  <img src="back18.png" class="layer" data-speed="0.03">
+
+</div>
+
+<script>
+let layers = document.querySelectorAll(".layer[data-speed]");
+
+let mouseX = 0, mouseY = 0;
+let curX = 0, curY = 0;
+
+document.addEventListener("mousemove", (e) => {
+  mouseX = (window.innerWidth / 2 - e.clientX);
+  mouseY = (window.innerHeight / 2 - e.clientY);
+});
+
+function animate() {
+  curX += (mouseX - curX) * 0.05;
+  curY += (mouseY - curY) * 0.05;
+
+  layers.forEach(layer => {
+    let speed = layer.dataset.speed;
+
+    layer.style.transform =
+      `translate(${curX * speed}px, ${curY * speed}px)`;
+  });
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+let blink1 = document.getElementById("blink1");
+let blink2 = document.getElementById("blink2");
+
+let blinkState = false;
+
+setInterval(() => {
+  blinkState = true;
+
+  let frames = 0;
+
+  let blinkAnim = setInterval(() => {
+    blink1.style.opacity = frames % 2 === 0 ? 1 : 0;
+    blink2.style.opacity = frames % 2 === 0 ? 0 : 1;
+
+    frames++;
+
+    if (frames > 3) { 
+      clearInterval(blinkAnim);
+      blink1.style.opacity = 1;
+      blink2.style.opacity = 0;
+      blinkState = false;
+    }
+
+  }, 666); 
+}, 5000);
+
+</script>
+
+</body>
+</html>
